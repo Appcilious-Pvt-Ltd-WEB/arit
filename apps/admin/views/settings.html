@@ -1,0 +1,128 @@
+{! filemanager/util/browser !}
+
+<form method="post" id="{{_form}}">
+
+<div class="e-row settingsform">
+	<div class="e-col-75">
+
+<p>
+	{"Site name"}<br />
+	<input type="text" name="site_name" size="40" value="{{ site_name|quotes }}" />
+	<span class="notice" id="site_name-notice">{"Please enter a name for your website."}</span>
+</p>
+
+<p>
+	{"Site domain"}<br />
+	<input type="text" name="site_domain" size="40" value="{{ site_domain|quotes }}" />
+	<span class="notice" id="site_domain-notice">{"Please enter a domain name for your website."}</span>
+</p>
+
+<p>
+	{"Email address"}<br />
+	<input type="text" name="email_from" size="40" value="{{ email_from|quotes }}" />
+	<span class="notice" id="email_from-notice">{"Please enter a valid email address."}</span>
+</p>
+
+<input type="hidden" name="timezone" value="{{ timezone|quotes }}" />
+<input type="hidden" name="default_layout" value="{{ default_layout|quotes }}" />
+
+<p>
+	{"Google Analytics ID"}<br />
+	<input type="text" name="google_analytics_id" size="40" value="{{ google_analytics_id|quotes }}" />
+</p>
+
+<p>
+	{"Auto-include Composer autoloader"}<br />
+	<select name="vendor_autoload">
+		<option value="enabled"{% if vendor_autoload == 'enabled' %} selected{% end %}>{"Yes"}</option>
+		<option value="disabled"{% if vendor_autoload == 'disabled' %} selected{% end %}>{"No"}</option>
+	</select>
+</p>
+
+<p>
+	{"Disable FLoC cohort tracking"} <a href="https://www.eff.org/deeplinks/2021/03/googles-floc-terrible-idea" target="_blank">{"More info"}</a><br />
+	<select name="disable_floc">
+		<option value="enabled"{% if disable_floc == 'enabled' %} selected{% end %}>{"Yes"}</option>
+		<option value="disabled"{% if disable_floc == 'disabled' %} selected{% end %}>{"No"}</option>
+	</select>
+</p>
+
+<p>
+	<input type="submit" value="{"Save Settings"}" />
+	&nbsp;
+	<a href="/" onclick="return confirm ('{"Are you sure you want to cancel and lose any changes?"}')">{"Cancel"}</a>
+</p>
+
+	</div>
+	<div class="e-col-25 e-no-padding-left">
+
+<div id="thumbnail-div">
+	{"Default thumbnail"}<br />
+	<div class="thumbnail-wrapper">
+		<div class="thumbnail" id="thumbnail-preview"
+		{% if default_thumbnail !== '' %}
+			style="background-image: url('{{default_thumbnail}}')"
+		{% end %}
+		></div>
+	</div>
+	<input type="hidden" name="default_thumbnail" id="thumbnail" size="40" value="{{ default_thumbnail|quotes }}" />
+	<input type="submit" id="thumbnail-browse" value="{"Choose"}" />
+	<input type="submit" id="thumbnail-clear" value="{"Clear"}" />
+</div>	
+	
+	</div>
+</div>
+
+</form>
+
+<div class="clear"></div>
+
+<script>
+$(function () {
+	/**
+	 * Thumbnail field behaviours.
+	 */
+	{% if default_thumbnail == '' %}
+		$('#thumbnail-clear').hide ();
+	{% end %}
+
+	$('#thumbnail-browse').click (function (e) {
+		e.preventDefault ();
+		$.filebrowser ({
+			allowed: ['jpg', 'jpeg', 'png', 'gif'],
+			set_value: '#thumbnail',
+			title: "{"Choose an image"}",
+			thumbs: true,
+			callback: function (file) {
+				$('#thumbnail-preview').css ('background-image', 'url(\'' + encodeURI (file) + '\')');
+				$('#thumbnail-clear').show ();
+			}
+		});
+	});
+	
+	$('#thumbnail-clear').click (function (e) {
+		e.preventDefault ();
+		$('#thumbnail').val ('');
+		$('#thumbnail-preview').css ('background-image', 'url(\'/apps/admin/css/default.jpg\')');
+		$(e.target).hide ();
+	});
+});
+</script>
+
+<style>
+.settingsform {
+	max-width: 960px;
+}
+
+#thumbnail-div {
+	width: 285px;
+	max-width: 285px;
+	min-width: 285px;
+}
+
+.thumbnail-wrapper {
+	margin-bottom: 5px;
+	margin-left: 0;
+}
+</style>
+

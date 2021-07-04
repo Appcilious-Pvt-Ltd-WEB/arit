@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+
+services: mongodb
+
+before_script:
+  - composer install --no-interaction --prefer-source
+
+script:
+  - lib/vendor/bin/phpunit --coverage-text --verbose
+
+branches:
+  only:
+    - master

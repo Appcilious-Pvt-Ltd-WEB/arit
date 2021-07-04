@@ -1,0 +1,43 @@
+<<?php /* */ ?>?xml version="1.0" encoding="UTF-8"?<?php /* */ ?>>
+
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:webfeeds="http://webfeeds.org/rss/1.0"
+	xmlns:media="http://search.yahoo.com/mrss/"
+	xmlns="http://purl.org/rss/1.0/"
+>
+
+<channel rdf:about="http://{{ conf ('General', 'site_domain') }}/blog">
+
+	<title>{{ title }}</title>
+	<link>http://{{ conf ('General', 'site_domain') }}/blog</link>
+	<description>{{ conf ('General', 'site_domain') }} {"official blog"}.</description>
+
+	<dc:language>{{ i18n.language }}</dc:language>
+	<dc:date>{{ date }}+00:00</dc:date>
+
+	<items>
+		<rdf:Seq>
+{% foreach posts %}
+			<rdf:li rdf:resource="http://{{ conf ('General', 'site_domain') }}{{ loop_value->url }}" />
+{% end %}
+		</rdf:Seq>
+	</items>
+
+</channel>
+
+{% foreach posts %}
+<item rdf:about="http://{{ conf ('General', 'site_domain') }}{{ loop_value->url }}">
+	<title>{{ loop_value->title }}</title>
+	<link>http://{{ conf ('General', 'site_domain') }}{{ loop_value->url }}</link>
+	<description>{{ loop_value->body }}</description>
+	<dc:date>{{ loop_value->ts|str_replace (' ', 'T', %s) }}+00:00</dc:date>
+	{% if loop_value->image != '' %}
+		<webfeeds:cover image="{{loop_value->image}}" />
+		<media:thumbnail url="{{loop_value->image}}" />
+	{% end %} 
+</item>
+
+{% end %}
+</rdf:RDF>

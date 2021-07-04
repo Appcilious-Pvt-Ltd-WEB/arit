@@ -1,0 +1,40 @@
+<style> .notice { display: none; } </style>
+
+<script type="text/javascript">
+$(function () {
+	$('#{{ _form }}').verify_values ({
+		handler: '{{ _rules }}',
+		callback: function (failed, dont_scroll) {
+			if (! dont_scroll) {
+				// scroll to top of form
+				$('#{{ _form }}')[0].scrollIntoView ();
+			}
+
+			// highlight the failed elements
+			for (var i = 0; i < failed.length; i++) {
+				var $el = $('#' + failed[i] + '-notice');
+				if ($el.length > 0) {
+					$el.show ();
+				} else {
+					console.error ('No visible notice for validation error on: ' + failed[i]);
+				}
+			}
+		},
+		reset: function (fields) {
+			for (var i = 0; i < fields.length; i++) {
+				$('#' + fields[i] + '-notice').hide ();
+			}
+		}
+	});
+	
+	var $el;
+	{% foreach _failed %}
+	$el = $('#{{ loop_value }}-notice');
+	if ($el.length > 0) {
+		$el.show ();
+	} else {
+		console.error ('No visible notice for validation error on: {{ loop_value }}');
+	}
+	{% end %}
+});
+</script>
