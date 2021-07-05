@@ -1,0 +1,16 @@
+{
+  "type":         "theme",
+  "folder":       "anaya",
+  "name":         "Anaya",
+  "version":      "1.0.0",
+  "website":      "http://cms.appcilious.com/",
+  "repository":   "git://github.com/jbroadway/bootstrapped.git",
+  "author": {
+    "name":     "Bhavna Deb",
+    "email":    "contact@appcilious.com"
+  },
+  "requires": {
+    "php": "7.4.0",
+    "elefant": "2.2.5"
+  }
+}
