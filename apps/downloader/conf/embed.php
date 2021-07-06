@@ -1,5 +1,5 @@
 ;<?php /*
 [downloader/index]
-label = "Downloader: Download"
+label = "Arit Video Downloader"
 */
 ;?>
